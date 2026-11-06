@@ -17,31 +17,43 @@ import java.util.Optional;
  */
 public class ProveedorDao {
 
-    // TODO SQL: listar todos los proveedores.
+    //listar todos los proveedores.
     // Columnas que lee Java: id_proveedor, nombre_proveedor, correo_proveedor, telefono_proveedor
     private static final String SQL_LISTAR = """
+            SELECT id_proveedor, nombre_proveedor, correo_proveedor, telefono_proveedor
+            FROM proveedores
+            ORDER BY id_proveedor;
             """;
 
-    // TODO SQL: buscar UN proveedor por su id.
+    //buscar UN proveedor por su id.
     // Parámetros: 1 = id_proveedor
     // Columnas que lee Java: id_proveedor, nombre_proveedor, correo_proveedor, telefono_proveedor
     private static final String SQL_BUSCAR_POR_ID = """
+            SELECT id_proveedor, nombre_proveedor, correo_proveedor, telefono_proveedor
+            FROM proveedores
+            WHERE id_proveedor = ?;
             """;
 
-    // TODO SQL: insertar un proveedor.
+    //insertar un proveedor.
     // Parámetros: 1 = nombre_proveedor, 2 = correo_proveedor, 3 = telefono_proveedor
     private static final String SQL_INSERTAR = """
+            INSERT INTO proveedores (nombre_proveedor, correo_proveedor, telefono_proveedor)
+            VALUES (?, ?, ?);
             """;
 
-    // TODO SQL: actualizar nombre, correo y teléfono de un proveedor.
+    //actualizar nombre, correo y teléfono de un proveedor.
     // Parámetros: 1 = nombre_proveedor, 2 = correo_proveedor, 3 = telefono_proveedor, 4 = id_proveedor
     private static final String SQL_ACTUALIZAR = """
+            UPDATE proveedores
+            SET nombre_proveedor = ?, correo_proveedor = ?, telefono_proveedor = ?
+            WHERE id_proveedor = ?;
             """;
 
-    // TODO SQL: eliminar un proveedor por su id (sin cascada).
+    //eliminar un proveedor por su id (sin cascada).
     // Parámetros: 1 = id_proveedor
     // Si tiene compras, PostgreSQL rechaza el DELETE por llave foránea (23503).
     private static final String SQL_ELIMINAR = """
+            DELETE FROM proveedores WHERE id_proveedor = ?;
             """;
 
     private final Connection conn;

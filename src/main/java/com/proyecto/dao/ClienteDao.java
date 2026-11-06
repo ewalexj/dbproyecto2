@@ -16,31 +16,43 @@ import java.util.Optional;
  */
 public class ClienteDao {
 
-    // TODO SQL: listar todos los clientes.
+    //listar todos los clientes.
     // Columnas que lee Java: id_cliente, nombre_cliente, correo_cliente, telefono_cliente
     private static final String SQL_LISTAR = """
+            SELECT id_cliente, nombre_cliente, correo_cliente, telefono_cliente
+            FROM clientes
+            ORDER BY id_cliente;
             """;
 
-    // TODO SQL: buscar UN cliente por su id.
+    //buscar UN cliente por su id.
     // Parámetros: 1 = id_cliente
     // Columnas que lee Java: id_cliente, nombre_cliente, correo_cliente, telefono_cliente
     private static final String SQL_BUSCAR_POR_ID = """
+            SELECT id_cliente, nombre_cliente, correo_cliente, telefono_cliente
+            FROM clientes
+            WHERE id_cliente = ?;
             """;
 
-    // TODO SQL: insertar un cliente.
+    //insertar un cliente.
     // Parámetros: 1 = nombre_cliente, 2 = correo_cliente, 3 = telefono_cliente
     private static final String SQL_INSERTAR = """
+            INSERT INTO clientes (nombre_cliente, correo_cliente, telefono_cliente)
+            VALUES (?, ?, ?);
             """;
 
-    // TODO SQL: actualizar nombre, correo y teléfono de un cliente.
+    //actualizar nombre, correo y teléfono de un cliente.
     // Parámetros: 1 = nombre_cliente, 2 = correo_cliente, 3 = telefono_cliente, 4 = id_cliente
     private static final String SQL_ACTUALIZAR = """
+            UPDATE clientes
+            SET nombre_cliente = ?, correo_cliente = ?, telefono_cliente = ?
+            WHERE id_cliente = ?;
             """;
 
-    // TODO SQL: eliminar un cliente por su id (sin cascada).
+    //eliminar un cliente por su id (sin cascada).
     // Parámetros: 1 = id_cliente
     // Si tiene ventas, PostgreSQL rechaza el DELETE por llave foránea (23503).
     private static final String SQL_ELIMINAR = """
+            DELETE FROM clientes WHERE id_cliente = ?;
             """;
 
     private final Connection conn;

@@ -15,20 +15,25 @@ import java.util.List;
  */
 public class CategoriaDao {
 
-    // TODO SQL: listar todas las categorías (ordenadas como prefieras).
+    //listar todas las categorías (ordenadas como prefieras).
     // Columnas que lee Java: id_categoria, nombre_categoria
     private static final String SQL_LISTAR = """
+            SELECT id_categoria, nombre_categoria
+            FROM categorias
+            ORDER BY nombre_categoria;
             """;
 
-    // TODO SQL: insertar una categoría.
+    //insertar una categoría.
     // Parámetros: 1 = nombre_categoria
     private static final String SQL_INSERTAR = """
+            INSERT INTO categorias (nombre_categoria) VALUES (?);
             """;
 
-    // TODO SQL: eliminar una categoría por su id (sin cascada).
+    //eliminar una categoría por su id (sin cascada).
     // Parámetros: 1 = id_categoria
     // Si tiene productos, PostgreSQL rechaza el DELETE por llave foránea (23503).
     private static final String SQL_ELIMINAR = """
+            DELETE FROM categorias WHERE id_categoria = ?;
             """;
 
     private final Connection conn;

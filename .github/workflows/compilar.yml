@@ -1,0 +1,25 @@
+# Compila el proyecto en cada push y en cada Pull Request.
+# Si el código no compila, GitHub marca el PR en rojo antes de hacer merge.
+name: Compilar
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Instalar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Compilar con Maven
+        run: mvn -B compile

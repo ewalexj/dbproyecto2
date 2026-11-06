@@ -17,35 +17,50 @@ import java.util.List;
  */
 public class CompraDao {
 
-    // TODO SQL: listar todas las compras.
+    //listar todas las compras.
     // Columnas que lee Java: id_compra, fecha_compra, id_proveedor
     private static final String SQL_LISTAR = """
+            SELECT id_compra, fecha_compra, id_proveedor
+            FROM compras
+            ORDER BY id_compra;
             """;
 
-    // TODO SQL: listar TODA la tabla detalle_compra.
+    //listar TODA la tabla detalle_compra.
     // Columnas que lee Java: id_compra, id_producto, cantidad, costo_unitario
     private static final String SQL_LISTAR_DETALLES = """
+            SELECT id_compra, id_producto, cantidad, costo_unitario
+            FROM detalle_compra
+            ORDER BY id_compra, id_producto;
             """;
 
-    // TODO SQL: listar los detalles de UNA compra.
+    //listar los detalles de UNA compra.
     // Parámetros: 1 = id_compra
     // Columnas que lee Java: id_compra, id_producto, cantidad, costo_unitario
     private static final String SQL_DETALLES_DE_COMPRA = """
+            SELECT id_compra, id_producto, cantidad, costo_unitario
+            FROM detalle_compra
+            WHERE id_compra = ?
+            ORDER BY id_producto;
             """;
 
-    // TODO SQL: insertar la compra y DEVOLVER su id generado (usa RETURNING id_compra).
+    //insertar la compra y DEVOLVER su id generado (usa RETURNING id_compra).
     // Parámetros: 1 = id_proveedor   (fecha_compra toma su DEFAULT)
     private static final String SQL_INSERTAR_COMPRA = """
+            INSERT INTO compras (id_proveedor) VALUES (?)
+            RETURNING id_compra;
             """;
 
-    // TODO SQL: insertar un renglón en detalle_compra.
+    //insertar un renglón en detalle_compra.
     // Parámetros: 1 = id_compra, 2 = id_producto, 3 = cantidad, 4 = costo_unitario
     private static final String SQL_INSERTAR_DETALLE = """
+            INSERT INTO detalle_compra (id_compra, id_producto, cantidad, costo_unitario)
+            VALUES (?, ?, ?, ?);
             """;
 
-    // TODO SQL: SUMAR la cantidad comprada a las existencias del producto.
+    //SUMAR la cantidad comprada a las existencias del producto.
     // Parámetros: 1 = cantidad, 2 = id_producto
     private static final String SQL_SUMAR_EXISTENCIAS = """
+            UPDATE productos SET existencias = existencias + ? WHERE id_producto = ?;
             """;
 
     private final Connection conn;
@@ -117,7 +132,7 @@ public class CompraDao {
             conn.commit(); // 5. Todo salió bien: se confirma
             return idCompra;
         } catch (SQLException e) {
-            conn.rollback(); // Algo falló: se deshace TODO lo de esta compra
+            conn.rollback(); // Algo falló: se deshace todo lo de esta compra
             throw e;
         } finally {
             conn.setAutoCommit(autoCommitOriginal); // 6. Deja la conexión como estaba

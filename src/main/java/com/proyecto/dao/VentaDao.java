@@ -17,36 +17,51 @@ import java.util.List;
  */
 public class VentaDao {
 
-    // TODO SQL: listar todas las ventas.
+    //listar todas las ventas.
     // Columnas que lee Java: id_venta, fecha_venta, id_cliente
     private static final String SQL_LISTAR = """
+            SELECT id_venta, fecha_venta, id_cliente
+            FROM ventas
+            ORDER BY id_venta;
             """;
 
-    // TODO SQL: listar TODA la tabla detalle_venta.
+    //listar TODA la tabla detalle_venta.
     // Columnas que lee Java: id_venta, id_producto, cantidad, precio_unitario
     private static final String SQL_LISTAR_DETALLES = """
+            SELECT id_venta, id_producto, cantidad, precio_unitario
+            FROM detalle_venta
+            ORDER BY id_venta, id_producto;
             """;
 
-    // TODO SQL: listar los detalles de UNA venta.
+    //listar los detalles de UNA venta.
     // Parámetros: 1 = id_venta
     // Columnas que lee Java: id_venta, id_producto, cantidad, precio_unitario
     private static final String SQL_DETALLES_DE_VENTA = """
+            SELECT id_venta, id_producto, cantidad, precio_unitario
+            FROM detalle_venta
+            WHERE id_venta = ?
+            ORDER BY id_producto;
             """;
 
-    // TODO SQL: insertar la venta y DEVOLVER su id generado (usa RETURNING id_venta).
+    //insertar la venta y DEVOLVER su id generado (usa RETURNING id_venta).
     // Parámetros: 1 = id_cliente   (fecha_venta toma su DEFAULT)
     private static final String SQL_INSERTAR_VENTA = """
+            INSERT INTO ventas (id_cliente) VALUES (?)
+            RETURNING id_venta;
             """;
 
-    // TODO SQL: insertar un renglón en detalle_venta.
+    //insertar un renglón en detalle_venta.
     // Parámetros: 1 = id_venta, 2 = id_producto, 3 = cantidad, 4 = precio_unitario
     private static final String SQL_INSERTAR_DETALLE = """
+            INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario)
+            VALUES (?, ?, ?, ?);
             """;
 
-    // TODO SQL: RESTAR la cantidad vendida a las existencias del producto.
+    //RESTAR la cantidad vendida a las existencias del producto.
     // Parámetros: 1 = cantidad, 2 = id_producto
     // Si no alcanza, el CHECK (existencias >= 0) falla con 23514 y se revierte todo.
     private static final String SQL_DESCONTAR_EXISTENCIAS = """
+            UPDATE productos SET existencias = existencias - ? WHERE id_producto = ?;
             """;
 
     private final Connection conn;
@@ -118,7 +133,7 @@ public class VentaDao {
             conn.commit(); // 5. Todo salió bien: se confirma
             return idVenta;
         } catch (SQLException e) {
-            conn.rollback(); // Algo falló: se deshace TODO lo de esta venta
+            conn.rollback(); // Algo falló: se deshace todo lo de esta venta
             throw e;
         } finally {
             conn.setAutoCommit(autoCommitOriginal); // 6. Deja la conexión como estaba

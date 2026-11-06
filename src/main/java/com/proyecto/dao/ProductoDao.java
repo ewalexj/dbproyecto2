@@ -26,10 +26,15 @@ public class ProductoDao {
             ORDER BY p.nombre;
             """;
 
-    // TODO SQL: buscar UN producto por su SKU (con JOIN a categorias, igual que SQL_LISTAR).
+    // Buscar UN producto por su SKU (con JOIN a categorias, igual que SQL_LISTAR).
     // Parámetros: 1 = sku
     // Columnas que lee Java: id_producto, sku, nombre, precio, existencias, id_categoria, nombre_categoria
     private static final String SQL_BUSCAR_POR_SKU = """
+            SELECT p.id_producto, p.sku, p.nombre, p.precio, p.existencias,
+                   p.id_categoria, c.nombre_categoria
+            FROM productos p
+            JOIN categorias c ON p.id_categoria = c.id_categoria
+            WHERE p.sku = ?;
             """;
 
     private static final String SQL_INSERTAR = """
